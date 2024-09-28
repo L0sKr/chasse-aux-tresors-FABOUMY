@@ -1,0 +1,26 @@
+{
+  "name": "chasse-aux-tresors-faboumy",
+  "version": "1.0.0",
+  "description": "Exercice pratique - La chasse aux trésors",
+  "author": "Carla Faboumy - L0sKr",
+  "license": "ISC",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "nodemon",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.0",
+    "@types/node": "^22.7.4",
+    "eslint": "^9.9.0",
+    "nodemon": "^3.1.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.7.0"
+  }
+}
