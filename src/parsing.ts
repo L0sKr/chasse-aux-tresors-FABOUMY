@@ -2,11 +2,16 @@ import fs from 'fs';
 import path from 'path';
 
 // import * as fs from "fs";
-type Map = string[][];
+export type TreasureMap = string[][];
 type AdvsInfo = { [key: string]: AdvInfo };
-type AdvInfo = { orientation: string; moves: string };
+export type AdvInfo = {
+  position: Position;
+  orientation: string;
+  moves: string;
+};
+export type Position = { latitude: number; longitude: number };
 export type ParsedInfo = {
-  treasureMap: Map;
+  treasureMap: TreasureMap;
   adventurersInfo: AdvsInfo;
 };
 
@@ -21,7 +26,7 @@ export function parseFileFromPath(filePath: string): ParsedInfo {
 }
 
 function processLinesInfo(lines: string[]): ParsedInfo {
-  let treasureMap: Map = [];
+  let treasureMap: TreasureMap = [];
   const adventurersInfo: AdvsInfo = {};
 
   for (const line of lines) {
@@ -43,6 +48,8 @@ function processLinesInfo(lines: string[]): ParsedInfo {
         setAdventurerInfos(
           adventurersInfo,
           lineInfo[1],
+          +lineInfo[2],
+          +lineInfo[3],
           lineInfo[4],
           lineInfo[5],
         );
@@ -52,33 +59,37 @@ function processLinesInfo(lines: string[]): ParsedInfo {
   return { treasureMap, adventurersInfo };
 }
 
-function createMap(mapWidth: number, mapHeight: number): Map {
+function createMap(mapWidth: number, mapHeight: number): TreasureMap {
   return Array.from({ length: mapHeight }, () =>
     Array.from({ length: mapWidth }, () => '.'),
   );
 }
 
-function addMountain(map: Map, longitude: number, latitude: number): Map {
+function addMountain(
+  map: TreasureMap,
+  longitude: number,
+  latitude: number,
+): TreasureMap {
   map[latitude][longitude] = 'M';
   return map;
 }
 
 function addTreasures(
-  map: Map,
+  map: TreasureMap,
   longitude: number,
   latitude: number,
   nbTreasures: number,
-): Map {
+): TreasureMap {
   map[latitude][longitude] = `T(${nbTreasures})`;
   return map;
 }
 
 function addAdventurer(
-  map: Map,
+  map: TreasureMap,
   name: string,
   longitude: number,
   latitude: number,
-): Map {
+): TreasureMap {
   map[latitude][longitude] = `A(${name})`;
   return map;
 }
@@ -86,9 +97,11 @@ function addAdventurer(
 function setAdventurerInfos(
   infos: AdvsInfo,
   name: string,
+  latitude: number,
+  longitude: number,
   orientation: string,
   moves: string,
 ): AdvsInfo {
-  infos[name] = { orientation, moves };
+  infos[name] = { position: { latitude, longitude }, orientation, moves };
   return infos;
 }
