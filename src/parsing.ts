@@ -2,8 +2,13 @@
 import fs from 'fs';
 import path from 'path';
 
-type AdvInfos = { [key: string]: AdvInfo };
+type Map = string[][];
+type AdvsInfo = { [key: string]: AdvInfo };
 type AdvInfo = { orientation: string; moves: string };
+type ParsedInfo = {
+  treasureMap: Map;
+  adventurersInfo: AdvsInfo;
+};
 
 export function parseFileFromPath(filePath: string): void {
   const filePathInDirectory: string = path.join(process.cwd(), filePath);
@@ -11,8 +16,15 @@ export function parseFileFromPath(filePath: string): void {
   const fileContent = fs.readFileSync(filePathInDirectory, 'utf-8');
   const lines = fileContent.split('\n');
 
-  let treasureMap: string[][] = [];
-  const advInfos: AdvInfos = {};
+  const parsedInfo: ParsedInfo = processLinesInfo(lines);
+
+  console.log(parsedInfo.treasureMap);
+  console.log(parsedInfo.adventurersInfo);
+}
+
+function processLinesInfo(lines: string[]): ParsedInfo {
+  let treasureMap: Map = [];
+  const adventurersInfo: AdvsInfo = {};
 
   for (const line of lines) {
     const lineInfo: string[] = line.replaceAll(' ', '').split('-');
@@ -30,55 +42,55 @@ export function parseFileFromPath(filePath: string): void {
         break;
       case 'A':
         addAdventurer(treasureMap, lineInfo[1], +lineInfo[2], +lineInfo[3]);
-        setAdventurerInfos(advInfos, lineInfo[1], lineInfo[4], lineInfo[5]);
+        setAdventurerInfos(
+          adventurersInfo,
+          lineInfo[1],
+          lineInfo[4],
+          lineInfo[5],
+        );
         break;
     }
   }
-  console.log(treasureMap);
-  console.log(advInfos);
+  return { treasureMap, adventurersInfo };
 }
 
-function createMap(mapWidth: number, mapHeight: number): string[][] {
+function createMap(mapWidth: number, mapHeight: number): Map {
   return Array.from({ length: mapHeight }, () =>
     Array.from({ length: mapWidth }, () => '.'),
   );
 }
 
-function addMountain(
-  map: string[][],
-  longitude: number,
-  latitude: number,
-): string[][] {
+function addMountain(map: Map, longitude: number, latitude: number): Map {
   map[latitude][longitude] = 'M';
   return map;
 }
 
 function addTreasures(
-  map: string[][],
+  map: Map,
   longitude: number,
   latitude: number,
   nbTreasures: number,
-): string[][] {
+): Map {
   map[latitude][longitude] = `T(${nbTreasures})`;
   return map;
 }
 
 function addAdventurer(
-  map: string[][],
+  map: Map,
   name: string,
   longitude: number,
   latitude: number,
-): string[][] {
+): Map {
   map[latitude][longitude] = `A(${name})`;
   return map;
 }
 
 function setAdventurerInfos(
-  infos: AdvInfos,
+  infos: AdvsInfo,
   name: string,
   orientation: string,
   moves: string,
-): AdvInfos {
+): AdvsInfo {
   infos[name] = { orientation, moves };
   return infos;
 }
