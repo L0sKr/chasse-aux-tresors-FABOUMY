@@ -1,25 +1,23 @@
-// import * as fs from "fs";
 import fs from 'fs';
 import path from 'path';
 
+// import * as fs from "fs";
 type Map = string[][];
 type AdvsInfo = { [key: string]: AdvInfo };
 type AdvInfo = { orientation: string; moves: string };
-type ParsedInfo = {
+export type ParsedInfo = {
   treasureMap: Map;
   adventurersInfo: AdvsInfo;
 };
 
-export function parseFileFromPath(filePath: string): void {
+export function parseFileFromPath(filePath: string): ParsedInfo {
   const filePathInDirectory: string = path.join(process.cwd(), filePath);
 
   const fileContent = fs.readFileSync(filePathInDirectory, 'utf-8');
   const lines = fileContent.split('\n');
 
   const parsedInfo: ParsedInfo = processLinesInfo(lines);
-
-  console.log(parsedInfo.treasureMap);
-  console.log(parsedInfo.adventurersInfo);
+  return parsedInfo;
 }
 
 function processLinesInfo(lines: string[]): ParsedInfo {
