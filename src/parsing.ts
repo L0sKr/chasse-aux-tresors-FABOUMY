@@ -3,7 +3,7 @@ import path from 'path';
 
 // import * as fs from "fs";
 export type TreasureMap = string[][];
-type AdvsInfo = { [key: string]: AdvInfo };
+export type AdvsInfo = { [key: string]: AdvInfo };
 export type AdvInfo = {
   marker: string;
   position: Position;
@@ -13,7 +13,7 @@ export type AdvInfo = {
 };
 export type Position = { latitude: number; longitude: number };
 export type ParsedInfo = {
-  treasureMap: TreasureMap;
+  map: TreasureMap;
   adventurersInfo: AdvsInfo;
 };
 
@@ -58,7 +58,7 @@ function processLinesInfo(lines: string[]): ParsedInfo {
         break;
     }
   }
-  return { treasureMap, adventurersInfo };
+  return { map: treasureMap, adventurersInfo };
 }
 
 function createMap(mapWidth: number, mapHeight: number): TreasureMap {

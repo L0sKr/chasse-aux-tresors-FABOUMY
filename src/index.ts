@@ -7,7 +7,10 @@ const entryFilePath: fs.PathOrFileDescriptor = process.argv[2];
 
 const processedEntryInfo: ParsedInfo = parseFileFromPath(entryFilePath);
 
-console.log(processedEntryInfo.treasureMap);
+console.log(processedEntryInfo.map);
 console.log(processedEntryInfo.adventurersInfo);
 
-processAdvMoves(processedEntryInfo);
+const huntResult = processAdvMoves(processedEntryInfo);
+
+console.log(huntResult.map);
+console.log(huntResult.adventurersInfo);

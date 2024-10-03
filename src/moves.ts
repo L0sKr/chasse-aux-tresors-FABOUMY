@@ -1,4 +1,4 @@
-import { AdvInfo, ParsedInfo, Position, TreasureMap } from './parsing';
+import { AdvInfo, AdvsInfo, ParsedInfo, Position, TreasureMap } from './parsing';
 
 // TODO: Pour un aventurier :
 // Avancer dans la bonne direction - ok
@@ -16,9 +16,10 @@ import { AdvInfo, ParsedInfo, Position, TreasureMap } from './parsing';
 // Si case M ou A: rester bloqué - ok
 
 type MoveResult = { map: TreasureMap; adventurerInfo: AdvInfo };
+type HuntResult = { map: TreasureMap; adventurersInfo: AdvsInfo };
 
-export function processAdvMoves(entryInfo: ParsedInfo): void {
-  let map = entryInfo.treasureMap;
+export function processAdvMoves(entryInfo: ParsedInfo): HuntResult {
+  let map = entryInfo.map;
   const adventurersInfo = entryInfo.adventurersInfo;
   const adventurersNames = Object.keys(adventurersInfo);
   const firstAdv: string = adventurersNames[0];
@@ -31,10 +32,7 @@ export function processAdvMoves(entryInfo: ParsedInfo): void {
       const move = adventurerInfo.moves[i];
 
       if (move === 'A') {
-        const forwardMoveResult = computeForwardMove(
-          map,
-          adventurerInfo,
-        );
+        const forwardMoveResult = computeForwardMove(map, adventurerInfo);
         map = forwardMoveResult.map;
         adventurerInfo = forwardMoveResult.adventurerInfo;
       } else {
@@ -44,15 +42,17 @@ export function processAdvMoves(entryInfo: ParsedInfo): void {
     }
   }
   
-  console.log(map);
-  console.log(adventurersInfo);
+  return { map, adventurersInfo };
 }
 
 function computeForwardMove(
   map: TreasureMap,
   adventurerInfo: AdvInfo,
 ): MoveResult {
-  const newPosition = computeNextPosition(adventurerInfo.orientation, adventurerInfo.position);
+  const newPosition = computeNextPosition(
+    adventurerInfo.orientation,
+    adventurerInfo.position,
+  );
   const newCaseType = map[newPosition.longitude][newPosition.latitude][0];
   let moveResult = { map, adventurerInfo };
   if (newCaseType === '.') {
@@ -107,23 +107,17 @@ function takeOneStep(
   newLon: number,
   newLat: number,
 ): MoveResult {
-  const advPosition = {...adventurerInfo.position};
-
   map[newLon][newLat] = adventurerInfo.marker;
 
-  //TODO: Sortir dans une fonction
-  if (map[advPosition.longitude][advPosition.latitude][0] !== 'T') {
-    map[advPosition.longitude][advPosition.latitude] = '.';
-  }
-  if (map[advPosition.longitude][advPosition.latitude][0] === 'A') {
-    map[advPosition.longitude][advPosition.latitude] = (map[advPosition.longitude][advPosition.latitude]).substring(1);
-  }
-  //TODO: Sortir dans une fonction
+  const updateMapResult = updatePreviousPosition(map, adventurerInfo);
+  map = updateMapResult.map;
+  adventurerInfo = updateMapResult.adventurerInfo;
 
   adventurerInfo.position = {
     longitude: newLon,
     latitude: newLat,
   };
+
   return { map, adventurerInfo };
 }
 
@@ -134,26 +128,39 @@ function collectTreasure(
   newLat: number,
 ): MoveResult {
   const numberOfTreasures = map[newLon][newLat][2];
-  const advPosition = adventurerInfo.position;
-  
-  //TODO: Sortir dans une fonction
-  const previousCase = map[advPosition.longitude][advPosition.latitude];
-  if (previousCase[0] !== 'T' && previousCase === adventurerInfo.marker) {
-    map[advPosition.longitude][advPosition.latitude] = '.';
-  }
-  if (previousCase[0] === 'A' && previousCase[1] === 'T') {
-    map[advPosition.longitude][advPosition.latitude] = (map[advPosition.longitude][advPosition.latitude]).substring(1);
-  }
-  //TODO: Sortir dans une fonction 
 
   map[newLon][newLat] =
-    +numberOfTreasures === 1 ? adventurerInfo.marker : `AT(${+numberOfTreasures - 1})`;
+    +numberOfTreasures === 1
+      ? adventurerInfo.marker
+      : `AT(${+numberOfTreasures - 1})`;
+
+  const updateMapResult = updatePreviousPosition(map, adventurerInfo);
+  map = updateMapResult.map;
+  adventurerInfo = updateMapResult.adventurerInfo;
 
   adventurerInfo.collectedTreasures += 1;
   adventurerInfo.position = {
     longitude: newLon,
     latitude: newLat,
   };
+
+  return { map, adventurerInfo };
+}
+
+function updatePreviousPosition(
+  map: TreasureMap,
+  adventurerInfo: AdvInfo,
+): MoveResult {
+  const advPosition = adventurerInfo.position;
+  const previousCase = map[advPosition.longitude][advPosition.latitude];
+
+  if (previousCase === adventurerInfo.marker) {
+    map[advPosition.longitude][advPosition.latitude] = '.';
+  } else if (previousCase[1] === 'T') {
+    map[advPosition.longitude][advPosition.latitude] =
+      previousCase.substring(1);
+  }
+
   return { map, adventurerInfo };
 }
 
