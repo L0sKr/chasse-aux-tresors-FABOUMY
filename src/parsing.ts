@@ -5,9 +5,11 @@ import path from 'path';
 export type TreasureMap = string[][];
 type AdvsInfo = { [key: string]: AdvInfo };
 export type AdvInfo = {
+  marker: string;
   position: Position;
   orientation: string;
   moves: string;
+  collectedTreasures: number;
 };
 export type Position = { latitude: number; longitude: number };
 export type ParsedInfo = {
@@ -102,6 +104,6 @@ function setAdventurerInfos(
   orientation: string,
   moves: string,
 ): AdvsInfo {
-  infos[name] = { position: { latitude, longitude }, orientation, moves };
+  infos[name] = { marker: `A(${name})`, position: { latitude, longitude }, orientation, moves, collectedTreasures: 0 };
   return infos;
 }
