@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-// import * as fs from "fs";
 export type TreasureMap = string[][];
 export type AdvsInfo = { [key: string]: AdvInfo };
 export type AdvInfo = {
@@ -104,6 +103,12 @@ function setAdventurerInfos(
   orientation: string,
   moves: string,
 ): AdvsInfo {
-  infos[name] = { marker: `A(${name})`, position: { latitude, longitude }, orientation, moves, collectedTreasures: 0 };
+  infos[name] = {
+    marker: `A(${name})`,
+    position: { latitude, longitude },
+    orientation,
+    moves,
+    collectedTreasures: 0,
+  };
   return infos;
 }

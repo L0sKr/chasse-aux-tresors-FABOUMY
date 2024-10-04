@@ -5,5 +5,9 @@
 # compiled output
 src/dist
 
+# test files
+test.txt
+treasureHuntResult.txt
+
 # dependencies
 node_modules
