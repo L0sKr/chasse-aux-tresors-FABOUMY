@@ -1,22 +1,13 @@
-import { AdvInfo, AdvsInfo, ParsedInfo, Position, TreasureMap } from './parsing';
-
-// TODO: Pour un aventurier :
-// Avancer dans la bonne direction - ok
-// Changer de direction - ok
-// Avancer après un changement de direction - ok
-// Ne pas avancer si M - ok
-// Décrémenter Trésors de la carte + compteur si trésor - ok
-// -> Si T(0) passer à un . - ok
-// compter les trésors par aventurier - ok
-
-// TODO: Pour x aventuriers :
-// Si A dans la case, vérifier que A.name différent de current - ok
-// Process un à un - ok
-// -> En partant du principe que les aventuriers ont le même nombre dec déplacements
-// Si case M ou A: rester bloqué - ok
+import {
+  AdvInfo,
+  AdvsInfo,
+  ParsedInfo,
+  Position,
+  TreasureMap,
+} from './parsing';
 
 type MoveResult = { map: TreasureMap; adventurerInfo: AdvInfo };
-type HuntResult = { map: TreasureMap; adventurersInfo: AdvsInfo };
+export type HuntResult = { map: TreasureMap; adventurersInfo: AdvsInfo };
 
 export function processAdvMoves(entryInfo: ParsedInfo): HuntResult {
   let map = entryInfo.map;
@@ -41,7 +32,7 @@ export function processAdvMoves(entryInfo: ParsedInfo): HuntResult {
       adventurersInfo[adventurerName] = adventurerInfo;
     }
   }
-  
+
   return { map, adventurersInfo };
 }
 
