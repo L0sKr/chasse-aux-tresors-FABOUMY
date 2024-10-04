@@ -1,32 +1,19 @@
 import fs from 'fs';
 import path from 'path';
 
-export type TreasureMap = string[][];
-export type AdvsInfo = { [key: string]: AdvInfo };
-export type AdvInfo = {
-  marker: string;
-  position: Position;
-  orientation: string;
-  moves: string;
-  collectedTreasures: number;
-};
-export type Position = { latitude: number; longitude: number };
-export type ParsedInfo = {
-  map: TreasureMap;
-  adventurersInfo: AdvsInfo;
-};
+import { AdvsInfo, HuntInfo, TreasureMap } from './models/game-state';
 
-export function parseFileFromPath(filePath: string): ParsedInfo {
+export function parseFileFromPath(filePath: string): HuntInfo {
   const filePathInDirectory: string = path.join(process.cwd(), filePath);
 
   const fileContent = fs.readFileSync(filePathInDirectory, 'utf-8');
   const lines = fileContent.split('\n');
 
-  const parsedInfo: ParsedInfo = processLinesInfo(lines);
+  const parsedInfo: HuntInfo = processLinesInfo(lines);
   return parsedInfo;
 }
 
-function processLinesInfo(lines: string[]): ParsedInfo {
+function processLinesInfo(lines: string[]): HuntInfo {
   let treasureMap: TreasureMap = [];
   const adventurersInfo: AdvsInfo = {};
 

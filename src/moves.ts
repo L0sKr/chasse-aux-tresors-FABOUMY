@@ -1,15 +1,8 @@
-import {
-  AdvInfo,
-  AdvsInfo,
-  ParsedInfo,
-  Position,
-  TreasureMap,
-} from './parsing';
+import { AdvInfo, HuntInfo, Position, TreasureMap } from './models/game-state';
 
 type MoveResult = { map: TreasureMap; adventurerInfo: AdvInfo };
-export type HuntResult = { map: TreasureMap; adventurersInfo: AdvsInfo };
 
-export function processAdvMoves(entryInfo: ParsedInfo): HuntResult {
+export function processAdvMoves(entryInfo: HuntInfo): HuntInfo {
   let map = entryInfo.map;
   const adventurersInfo = entryInfo.adventurersInfo;
   const adventurersNames = Object.keys(adventurersInfo);

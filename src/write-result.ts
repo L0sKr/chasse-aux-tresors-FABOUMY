@@ -1,15 +1,14 @@
 import * as fs from 'fs';
 
-import { HuntResult } from './moves';
-import { AdvsInfo, TreasureMap } from './parsing';
+import { AdvsInfo, HuntInfo, TreasureMap } from './models/game-state';
 
-export function writeHuntOutput(huntResult: HuntResult): void {
+export function writeHuntOutput(huntResult: HuntInfo): void {
   const huntOutput: string = formatHuntResult(huntResult);
 
   fs.writeFileSync('treasureHuntResult.txt', huntOutput);
 }
 
-function formatHuntResult(huntResult: HuntResult): string {
+function formatHuntResult(huntResult: HuntInfo): string {
   let huntOutput: string;
   huntOutput = `C - ${huntResult.map[0].length} - ${huntResult.map.length}\n`;
   huntOutput += retrieveMountainInfoFromMap(huntResult.map);
