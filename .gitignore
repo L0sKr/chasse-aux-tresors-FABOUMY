@@ -4,6 +4,7 @@
 
 # compiled output
 src/dist
+/dist
 
 # test files
 test.txt
