@@ -1,6 +1,6 @@
 import { AdvInfo, HuntInfo, Position, TreasureMap } from './models/game-state';
 
-type MoveResult = { map: TreasureMap; adventurerInfo: AdvInfo };
+export type MoveResult = { map: TreasureMap; adventurerInfo: AdvInfo };
 
 export function processAdvMoves(entryInfo: HuntInfo): HuntInfo {
   let map = entryInfo.map;
@@ -29,14 +29,11 @@ export function processAdvMoves(entryInfo: HuntInfo): HuntInfo {
   return { map, adventurersInfo };
 }
 
-function computeForwardMove(
+export function computeForwardMove(
   map: TreasureMap,
   adventurerInfo: AdvInfo,
 ): MoveResult {
-  const newPosition = computeNextPosition(
-    adventurerInfo.orientation,
-    adventurerInfo.position,
-  );
+  const newPosition = computeNextPosition(adventurerInfo);
   const newCaseType = map[newPosition.longitude][newPosition.latitude][0];
   let moveResult = { map, adventurerInfo };
   if (newCaseType === '.') {
@@ -57,35 +54,32 @@ function computeForwardMove(
   return moveResult;
 }
 
-function computeNextPosition(
-  orientation: string,
-  advPosition: Position,
-): Position {
-  let newLon = advPosition.longitude;
-  let newLat = advPosition.latitude;
-  switch (orientation) {
+export function computeNextPosition(adventurerInfo: AdvInfo): Position {
+  let newLon = adventurerInfo.position.longitude;
+  let newLat = adventurerInfo.position.latitude;
+  switch (adventurerInfo.orientation) {
     case 'N':
-      newLon = advPosition.longitude - 1;
-      newLat = advPosition.latitude;
+      newLon = adventurerInfo.position.longitude - 1;
+      newLat = adventurerInfo.position.latitude;
       break;
     case 'O':
-      newLon = advPosition.longitude;
-      newLat = advPosition.latitude - 1;
+      newLon = adventurerInfo.position.longitude;
+      newLat = adventurerInfo.position.latitude - 1;
       break;
 
     case 'S':
-      newLon = advPosition.longitude + 1;
-      newLat = advPosition.latitude;
+      newLon = adventurerInfo.position.longitude + 1;
+      newLat = adventurerInfo.position.latitude;
       break;
     case 'E':
-      newLon = advPosition.longitude;
-      newLat = advPosition.latitude + 1;
+      newLon = adventurerInfo.position.longitude;
+      newLat = adventurerInfo.position.latitude + 1;
       break;
   }
   return { longitude: newLon, latitude: newLat };
 }
 
-function takeOneStep(
+export function takeOneStep(
   map: TreasureMap,
   adventurerInfo: AdvInfo,
   newLon: number,
@@ -105,7 +99,7 @@ function takeOneStep(
   return { map, adventurerInfo };
 }
 
-function collectTreasure(
+export function collectTreasure(
   map: TreasureMap,
   adventurerInfo: AdvInfo,
   newLon: number,
@@ -131,7 +125,7 @@ function collectTreasure(
   return { map, adventurerInfo };
 }
 
-function updatePreviousPosition(
+export function updatePreviousPosition(
   map: TreasureMap,
   adventurerInfo: AdvInfo,
 ): MoveResult {
@@ -148,7 +142,7 @@ function updatePreviousPosition(
   return { map, adventurerInfo };
 }
 
-function computeTurningMove(
+export function computeTurningMove(
   adventurerInfo: AdvInfo,
   direction: string,
 ): AdvInfo {
