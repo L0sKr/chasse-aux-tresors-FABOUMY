@@ -3,7 +3,9 @@
 .vscode
 
 # compiled output
+spec/out
 src/dist
+src/test/dist
 /dist
 
 # test files

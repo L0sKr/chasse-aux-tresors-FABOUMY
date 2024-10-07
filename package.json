@@ -4,21 +4,28 @@
   "description": "Exercice pratique - La chasse aux trésors",
   "author": "Carla Faboumy - L0sKr",
   "license": "ISC",
-  "type": "module",
   "main": "src/index.ts",
   "scripts": {
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "babel src --delete-dir-on-start -d \"spec/out\" src --out-dir \"spec/out\" -x \".ts\" -x \".js\" && jasmine"
   },
   "dependencies": {
+    "@types/jasmine": "^5.1.4",
     "fs": "^0.0.1-security",
     "line-reader": "^0.4.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.25.7",
+    "@babel/core": "^7.25.7",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.25.7",
+    "@babel/preset-typescript": "^7.25.7",
+    "@babel/register": "^7.25.7",
     "@eslint/js": "^9.9.0",
     "@types/line-reader": "^0.0.37",
     "@types/node": "^22.7.4",
     "eslint": "^9.9.0",
+    "jasmine": "^5.3.1",
     "tsx": "^4.19.1",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.8.0"
