@@ -13,7 +13,7 @@ export function parseFileFromPath(filePath: string): HuntInfo {
   return parsedInfo;
 }
 
-function processLinesInfo(lines: string[]): HuntInfo {
+export function processLinesInfo(lines: string[]): HuntInfo {
   let treasureMap: TreasureMap = [];
   const adventurersInfo: AdvsInfo = {};
 
@@ -42,47 +42,52 @@ function processLinesInfo(lines: string[]): HuntInfo {
           lineInfo[5],
         );
         break;
+      default:
+        break;
     }
   }
   return { map: treasureMap, adventurersInfo };
 }
 
-function createMap(mapWidth: number, mapHeight: number): TreasureMap {
+export function createMap(mapWidth: number, mapHeight: number): TreasureMap {
   return Array.from({ length: mapHeight }, () =>
     Array.from({ length: mapWidth }, () => '.'),
   );
 }
 
-function addMountain(
+export function addMountain(
   map: TreasureMap,
-  longitude: number,
   latitude: number,
+  longitude: number,
 ): TreasureMap {
-  map[latitude][longitude] = 'M';
+  if (longitude < map.length && latitude < map[0].length)
+    map[longitude][latitude] = 'M';
   return map;
 }
 
-function addTreasures(
+export function addTreasures(
   map: TreasureMap,
-  longitude: number,
   latitude: number,
+  longitude: number,
   nbTreasures: number,
 ): TreasureMap {
-  map[latitude][longitude] = `T(${nbTreasures})`;
+  if (longitude < map.length && latitude < map[0].length && nbTreasures > 0)
+    map[longitude][latitude] = `T(${nbTreasures})`;
   return map;
 }
 
-function addAdventurer(
+export function addAdventurer(
   map: TreasureMap,
   name: string,
-  longitude: number,
   latitude: number,
+  longitude: number,
 ): TreasureMap {
-  map[latitude][longitude] = `A(${name})`;
+  if (longitude < map.length && latitude < map[0].length)
+    map[longitude][latitude] = `A(${name})`;
   return map;
 }
 
-function setAdventurerInfos(
+export function setAdventurerInfos(
   infos: AdvsInfo,
   name: string,
   latitude: number,
