@@ -8,7 +8,7 @@ export function writeHuntOutput(huntResult: HuntInfo): void {
   fs.writeFileSync('treasureHuntResult.txt', huntOutput);
 }
 
-function formatHuntResult(huntResult: HuntInfo): string {
+export function formatHuntResult(huntResult: HuntInfo): string {
   let huntOutput: string;
   huntOutput = `C - ${huntResult.map[0].length} - ${huntResult.map.length}\n`;
   huntOutput += retrieveMountainInfoFromMap(huntResult.map);
@@ -18,7 +18,7 @@ function formatHuntResult(huntResult: HuntInfo): string {
   return huntOutput;
 }
 
-function retrieveMountainInfoFromMap(map: TreasureMap): string {
+export function retrieveMountainInfoFromMap(map: TreasureMap): string {
   let mountainInfo: string = '';
   for (let latitude = 0; latitude < map.length; latitude++) {
     for (let longitude = 0; longitude < map[latitude].length; longitude++) {
@@ -30,7 +30,7 @@ function retrieveMountainInfoFromMap(map: TreasureMap): string {
   return mountainInfo;
 }
 
-function retrieveTreasureInfoFromMap(map: TreasureMap): string {
+export function retrieveTreasureInfoFromMap(map: TreasureMap): string {
   let treasureInfo: string = '';
   for (let latitude = 0; latitude < map.length; latitude++) {
     for (let longitude = 0; longitude < map[latitude].length; longitude++) {
@@ -44,7 +44,7 @@ function retrieveTreasureInfoFromMap(map: TreasureMap): string {
   return treasureInfo;
 }
 
-function retrieveAdventurersInfo(adventurersInfo: AdvsInfo): string {
+export function retrieveAdventurersInfo(adventurersInfo: AdvsInfo): string {
   let adventurersResultInfo: string = '';
   const adventurersNames = Object.keys(adventurersInfo);
 
